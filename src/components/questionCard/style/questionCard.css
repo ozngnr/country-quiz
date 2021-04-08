@@ -1,0 +1,26 @@
+.card-wrapper {
+  margin: auto;
+}
+
+.card {
+  position: relative;
+  max-width: 465px;
+  background: white;
+  border-radius: 25px;
+  padding: 2em;
+}
+
+.card-title {
+  font-size: 2.25rem;
+  text-transform: uppercase;
+  color: #f2f2f2;
+  margin-bottom: 10px;
+}
+
+.card-image {
+  position: absolute;
+  width: 160px;
+  height: auto;
+  top: -75px;
+  right: 0;
+}
