@@ -5,6 +5,7 @@
 .card {
   position: relative;
   max-width: 465px;
+  height: 700px;
   background: white;
   border-radius: 25px;
   padding: 2em;

@@ -43,7 +43,7 @@
   left: 1em;
 }
 
-.answers-button:active {
+.answers-button:hover {
   color: #ffffff;
   background: #f9a826;
   border: 2px solid transparent;
@@ -52,4 +52,8 @@
 
 .green {
   background: greenyellow;
+}
+
+.red {
+  background: red;
 }

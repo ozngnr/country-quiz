@@ -9,9 +9,16 @@ export default function QuestionsContainer() {
   const [isLoading, setIsLoading] = useState(false)
   
   //functions
-  function handleAnswer(answer) {
-    if (answer.isCorrect) {
-    }
+  function handleAnswer(choice) {
+    const updatedAnswers = question.answers.map(answer => {
+      if (answer.id === choice.id) {
+        return {...answer, isSelected: !answer.isSelected}
+      }
+      return answer
+    })
+    console.log(updatedAnswers)
+    setQuestion(prevQ => ({...prevQ, answers: updatedAnswers}))
+    console.log(question.answers)
   }
 
   //get 4 random countries
@@ -28,10 +35,10 @@ export default function QuestionsContainer() {
         for (let i = 0; i < 3; i++) {
           for (let j = i; j < 1; j++) {
             const random = Math.floor(Math.random() * data.length)
-            randomCountries.push({id: random, isCorrect: true, ...data[random]})
+            randomCountries.push({id: random, isCorrect: true, isSelected: false, ...data[random]})
           }
           const random = Math.floor(Math.random() * data.length)
-          randomCountries.push({id: random, isCorrect: false, ...data[random]})
+          randomCountries.push({id: random, isCorrect: false, isSelected: false, ...data[random]})
         }
         
         return randomCountries
@@ -48,21 +55,21 @@ export default function QuestionsContainer() {
       if (roll < 0.5 ) {
         return setQuestion({
           question: `What is the capital of ${countries[0].name}?`,
-          correctAnswer: {id :countries[0].id, country: countries[0].name},
+          correctAnswer: {id :countries[0].id, capital: countries[0].capital},
           answers: 
             countries
             .sort((a, b) => a.id - b.id) // shuffle countries array before rendering
-            .map(({id, capital, isCorrect}) => ({id, capital, isCorrect})) // pull necessary key value pairs for the question
+            .map(({id, capital, isCorrect, isSelected}) => ({id, capital, isCorrect, isSelected})) // pull necessary key value pairs for the question
         })
       }
       setQuestion({
         flag: countries[0].flag,
         question: `Which country does this flag belong to?`,
-        correctAnswer: {id :countries[0].id, capital: countries[0].capital},
+        correctAnswer: {id :countries[0].id, country: countries[0].name},
         answers: 
           countries
           .sort((a, b) => a.id - b.id) // shuffle countries array before rendering
-          .map(({id, name, isCorrect}) => ({id, country: name, isCorrect})) // pull necessary key value pairs for the question
+          .map(({id, name, isCorrect, isSelected}) => ({id, country: name, isCorrect, isSelected})) // pull necessary key value pairs for the question
       })
     }
 
@@ -70,7 +77,6 @@ export default function QuestionsContainer() {
 
   }, [countries])
 
-  console.log(question.correctAnswer)
   return (
     <>
       {
