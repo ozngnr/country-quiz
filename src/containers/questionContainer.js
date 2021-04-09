@@ -3,31 +3,32 @@ import { QuestionCard, Question } from '../components';
 
 export default function QuestionsContainer() {
   const [countries, setCountries] = useState([])
-  const [question, setQuestion] = useState({ question:"", correctAnswer: "", answers: [] })
+  const [question, setQuestion] = useState({ question:"", answers: [] })
   const [currentQuestion, setCurrentQuestion] = useState(1)
   const [score, setScore] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
-  
-  //functions
+  const [endGame, setEndGame] = useState(false)
 
+  //functions
   function handleAnswer(choice) {
-    choice.isCorrect && setScore(prevScore => prevScore + 1)
+    choice.isCorrect && score < currentQuestion && setScore(score + 1)
     handleAnswerColor(choice)
-    console.log(question.answers)
   }
 
   function nextQuestion() {
-    setCurrentQuestion(currentQuestion + 1)
+    if (currentQuestion < 10) {
+      return setCurrentQuestion(currentQuestion + 1)
+    }
+    setEndGame(true)
   }
 
   function handleAnswerColor(choice) {
     const updatedAnswers = question.answers.map(answer => {
-      if (answer.id === choice.id || answer.id === question.correctAnswer.id) {
+      if (answer.id === choice.id || answer.isCorrect) {
         return {...answer, isSelected: true}
       }
       return {...answer, isSelected: false}
     })
-    console.log(updatedAnswers)
     setQuestion(prevQ => ({...prevQ, answers: updatedAnswers}))
   }
   
@@ -66,7 +67,6 @@ export default function QuestionsContainer() {
       if (roll < 0.5 ) {
         return setQuestion({
           question: `What is the capital of ${countries[0].name}?`,
-          correctAnswer: {id :countries[0].id, capital: countries[0].capital},
           answers: 
             countries
             .sort((a, b) => a.id - b.id) // shuffle countries array before rendering
@@ -76,7 +76,6 @@ export default function QuestionsContainer() {
       setQuestion({
         flag: countries[0].flag,
         question: `Which country does this flag belong to?`,
-        correctAnswer: {id :countries[0].id, country: countries[0].name},
         answers: 
           countries
           .sort((a, b) => a.id - b.id) // shuffle countries array before rendering
@@ -92,10 +91,8 @@ export default function QuestionsContainer() {
     <>
       {
         isLoading ? <h1>Loading...</h1> : 
-          <QuestionCard>
+          <QuestionCard endGame={endGame}>
               <Question data={question} handleAnswer={handleAnswer} />
-              {score}
-              <button onClick={nextQuestion}>next</button>
           </QuestionCard>
       }
     </>
