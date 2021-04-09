@@ -9,17 +9,28 @@ export default function QuestionsContainer() {
   const [isLoading, setIsLoading] = useState(false)
   
   //functions
+
   function handleAnswer(choice) {
+    choice.isCorrect && setScore(prevScore => prevScore + 1)
+    handleAnswerColor(choice)
+    console.log(question.answers)
+  }
+
+  function nextQuestion() {
+    setCurrentQuestion(currentQuestion + 1)
+  }
+
+  function handleAnswerColor(choice) {
     const updatedAnswers = question.answers.map(answer => {
-      if (answer.id === choice.id) {
-        return {...answer, isSelected: !answer.isSelected}
+      if (answer.id === choice.id || answer.id === question.correctAnswer.id) {
+        return {...answer, isSelected: true}
       }
-      return answer
+      return {...answer, isSelected: false}
     })
     console.log(updatedAnswers)
     setQuestion(prevQ => ({...prevQ, answers: updatedAnswers}))
-    console.log(question.answers)
   }
+  
 
   //get 4 random countries
   const url = "https://restcountries.eu/rest/v2/all?fields=name;capital;flag"
@@ -83,6 +94,8 @@ export default function QuestionsContainer() {
         isLoading ? <h1>Loading...</h1> : 
           <QuestionCard>
               <Question data={question} handleAnswer={handleAnswer} />
+              {score}
+              <button onClick={nextQuestion}>next</button>
           </QuestionCard>
       }
     </>
