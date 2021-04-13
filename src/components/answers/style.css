@@ -1,0 +1,9 @@
+.answers-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  counter-reset: item;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}

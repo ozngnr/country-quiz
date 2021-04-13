@@ -1,18 +1,37 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { Context } from '../../context/context';
+import "./style.css"
+
 import {ReactComponent as AdventureLogo} from "../../images/undraw_adventure_4hum.svg"
 import {ReactComponent as WinnersLogo} from "../../images/undraw_winners_ao2o.svg"
-import "./style/questionCard.css"
 
-export default function QuestionCard({children, endGame}) {
-  const logo = endGame ? <WinnersLogo className="card-image"/> : <AdventureLogo className="card-image"/>
+import Answers from '../answers';
+import Question from '../question';
+
+export default function QuestionCard() {
+  const {isLoading, endGame, question, score} = useContext(Context)
+  console.log(question)
   return (
-    <div className="card-wrapper">
-      <h1 className="card-title">Country Quiz</h1>
-      <div className="card">
-        {logo}
-        {children}
-      </div>
-    </div>
+    <>
+      {isLoading ? <h1>Loading...</h1> : 
+      <div className="card-wrapper">
+        <h1 className="card-title">Country Quiz</h1>
+        {endGame ? 
+          <div className="card">
+            <WinnersLogo className="card-endGame-image"/>
+            <h1 className="card-endGame-subtitle">Results</h1>
+            <p className="card-endGame-text">You got <span>{score}</span> correct answers</p>
+            <button className="card-endGame-button">Try Again</button>
+          </div> 
+          : 
+          <div className="card">
+            <AdventureLogo className="card-image" />
+            <Question data={question} />
+            <Answers answers={question.answers}/>
+          </div>
+        }
+      </div>}
+    </>
   )
 }
 

@@ -4,8 +4,8 @@
 
 .card {
   position: relative;
-  max-width: 465px;
-  height: 700px;
+  text-align: center;
+  width: 465px;
   background: white;
   border-radius: 25px;
   padding: 2em;
@@ -24,4 +24,10 @@
   height: auto;
   top: -75px;
   right: 0;
+}
+
+.card-endGame-image {
+  margin: 2em 0 3em;
+  width: 240px;
+  height: auto;
 }

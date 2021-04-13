@@ -1,12 +1,13 @@
 import React from 'react';
 import './App.css';
-import QuestionContainer from './containers/questionContainer';
+import QuestionCard from './components/questionCard';
+
 
 
 function App() {
   return (
     <div className="App">
-      <QuestionContainer />
+      <QuestionCard />
       <div className="bg-rectangle right"></div>
       <div className="bg-rectangle left"></div>
     </div>
