@@ -3,13 +3,11 @@ import React, { useState, useEffect} from 'react';
 const Context = React.createContext()
 
 function ContextProvider({children}) {
-  const url = "https://restcountries.eu/rest/v2/region/europe?fields=name;capital;flag"
-
   const [countries, setCountries] = useState([])
   const [question, setQuestion] = useState({ question: "", answers: [] })
-  const [currentQuestion, setCurrentQuestion] = useState(1)
   const [score, setScore] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
+  const [currentQuestion, setCurrentQuestion] = useState(1)
   const [endGame, setEndGame] = useState(false)
 
   //functions
@@ -32,6 +30,8 @@ function ContextProvider({children}) {
   }
 
   //get 4 random countries
+  const url = "https://restcountries.eu/rest/v2/region/europe?fields=name;capital;flag"
+
   useEffect(() => {
     setIsLoading(true)
 

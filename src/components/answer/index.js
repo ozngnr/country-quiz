@@ -6,8 +6,9 @@ import { Context } from '../../context/context';
 
 export default function Answer({answer}) {
   const {handleAnswer} = useContext(Context)
-
-  const btn = 
+  console.log("answer rendered")
+  
+  const addClass = 
     answer.isSelected && answer.isCorrect ? "correct" : 
     answer.isSelected && !answer.isCorrect ? "incorrect" : ""
 
@@ -18,7 +19,7 @@ export default function Answer({answer}) {
   return (
     <li className="answers-item">
       <button 
-        className={`answers-button ${btn}`}
+        className={`answers-button ${addClass}`}
         onClick={() => handleAnswer(answer)}>
         {answer.country || answer.capital}
         {icon}

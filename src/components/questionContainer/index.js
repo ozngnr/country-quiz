@@ -9,14 +9,14 @@ import Answers from '../answers';
 import Question from '../question';
 
 export default function QuestionCard() {
-  const {isLoading, endGame, question, score} = useContext(Context)
-  console.log(question)
+  const {endGame, score} = useContext(Context)
+  console.log("questionCard rendered")
+
   return (
-    <>
-      {isLoading ? <h1>Loading...</h1> : 
       <div className="card-wrapper">
         <h1 className="card-title">Country Quiz</h1>
-        {endGame ? 
+        {
+          endGame ? 
           <div className="card">
             <WinnersLogo className="card-endGame-image"/>
             <h1 className="card-endGame-subtitle">Results</h1>
@@ -26,12 +26,12 @@ export default function QuestionCard() {
           : 
           <div className="card">
             <AdventureLogo className="card-image" />
-            <Question data={question} />
-            <Answers answers={question.answers}/>
+            <Question />
+            <Answers />
+            <button>Next</button>
           </div>
         }
-      </div>}
-    </>
+      </div>
   )
 }
 

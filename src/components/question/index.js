@@ -1,13 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import { Context } from '../../context/context';
 import "./style.css"
 
-export default function Question({ data }) {
-  const {question, flag} = data
+export default function Question() {
+  const {question} = useContext(Context)
+  console.log("question rendered")
 
   return (
     <div className="question-wrapper">
-      {flag && <img className="question-flag" src={flag} alt={`flag`}/>}
-      <h2 className="question-title">{question}</h2>
+      {question.flag && <img className="question-flag" src={question.flag} alt={`flag`}/>}
+      <h2 className="question-title">{question.question}</h2>
     </div>
   )
 }

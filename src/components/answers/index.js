@@ -3,12 +3,13 @@ import "./style.css"
 import Answer from '../answer';
 import { Context } from '../../context/context';
 
-export default function Answers({answers}) {
-  
+export default function Answers() {
+  const {question} = useContext(Context)
+  console.log("answers rendered")
 
   return (
     <ul className="answers-list">
-      {answers.map(answer => (
+      {question.answers.map(answer => (
         <Answer key={answer.id} answer={answer}/>
       ))}
     </ul>
