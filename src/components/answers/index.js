@@ -5,7 +5,6 @@ import { Context } from '../../context/context';
 
 export default function Answers() {
   const {question} = useContext(Context)
-  console.log("answers rendered")
 
   return (
     <ul className="answers-list">

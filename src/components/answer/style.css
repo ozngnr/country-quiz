@@ -39,10 +39,6 @@
   border-radius: 12px;
 }
 
-.answers-button:focus {
-  outline: none;
-}
-
 .correct {
   color: #ffffff;
   background: #60bf88;

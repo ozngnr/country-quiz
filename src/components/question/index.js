@@ -4,7 +4,6 @@ import "./style.css"
 
 export default function Question() {
   const {question} = useContext(Context)
-  console.log("question rendered")
 
   return (
     <div className="question-wrapper">

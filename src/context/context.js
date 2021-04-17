@@ -5,10 +5,11 @@ const Context = React.createContext()
 function ContextProvider({children}) {
   const [countries, setCountries] = useState([])
   const [question, setQuestion] = useState({ question: "", answers: [] })
-  const [score, setScore] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(1)
-  const [endGame, setEndGame] = useState(false)
+  const [score, setScore] = useState(0)
+  const [endGame, setEndGame] = useState(true)
+  const [showButton, setShowButton] = useState(false) 
 
   //functions
   function handleAnswer(choice) {
@@ -18,15 +19,22 @@ function ContextProvider({children}) {
       )
 
     setQuestion(prevQ => ({...prevQ, answers: updatedAnswers}))
-
     choice.isCorrect && score < currentQuestion && setScore(score + 1)  
+    setShowButton(true)
   }
 
   function nextQuestion() {
     if (currentQuestion < 10) {
-      return setCurrentQuestion(currentQuestion + 1)
+      setCurrentQuestion(currentQuestion + 1)
+      return setShowButton(false)
     }
     setEndGame(true)
+  }
+
+  function resetGame() {
+    setCurrentQuestion(1)
+    setScore(0)
+    setEndGame(false)
   }
 
   //get 4 random countries
@@ -80,7 +88,16 @@ function ContextProvider({children}) {
   }, [countries])
 
   return (
-    <Context.Provider value={{question, handleAnswer, isLoading, endGame, score}}>
+    <Context.Provider value={{
+      question, 
+      handleAnswer, 
+      isLoading, 
+      endGame, 
+      score, 
+      nextQuestion,
+      showButton, 
+      resetGame
+    }}>
       {children}
     </Context.Provider>
   )

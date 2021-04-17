@@ -9,11 +9,17 @@ import Answers from '../answers';
 import Question from '../question';
 
 export default function QuestionCard() {
-  const {endGame, score} = useContext(Context)
-  console.log("questionCard rendered")
+  const {endGame, score, nextQuestion, showButton, resetGame} = useContext(Context)
+
+  const mySet = new Set()
+
+  mySet.add({ id: "5"})
+  mySet.add(1)
+  console.log(mySet)
 
   return (
       <div className="card-wrapper">
+        <div>{JSON.stringify([mySet])}</div>
         <h1 className="card-title">Country Quiz</h1>
         {
           endGame ? 
@@ -21,14 +27,14 @@ export default function QuestionCard() {
             <WinnersLogo className="card-endGame-image"/>
             <h1 className="card-endGame-subtitle">Results</h1>
             <p className="card-endGame-text">You got <span>{score}</span> correct answers</p>
-            <button className="card-endGame-button">Try Again</button>
+            <button  onClick={() => resetGame()} className="card-btn endGame">Try Again</button>
           </div> 
           : 
           <div className="card">
             <AdventureLogo className="card-image" />
             <Question />
             <Answers />
-            <button>Next</button>
+            {showButton && <button onClick={() => nextQuestion()} className="card-btn next">Next</button>}
           </div>
         }
       </div>

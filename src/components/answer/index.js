@@ -6,7 +6,6 @@ import { Context } from '../../context/context';
 
 export default function Answer({answer}) {
   const {handleAnswer} = useContext(Context)
-  console.log("answer rendered")
   
   const addClass = 
     answer.isSelected && answer.isCorrect ? "correct" : 

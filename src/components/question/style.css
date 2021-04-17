@@ -4,10 +4,12 @@
 
 .question-title {
   color: #2f527b;
+  text-align: left;
 }
 .question-flag {
+  display: block;
   top: 10px;
-  width: 85px;
+  height: 60px;
   box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.3);
   border-radius: 4px;
 }
