@@ -11,15 +11,8 @@ import Question from '../question';
 export default function QuestionCard() {
   const {endGame, score, nextQuestion, showButton, resetGame} = useContext(Context)
 
-  const mySet = new Set()
-
-  mySet.add({ id: "5"})
-  mySet.add(1)
-  console.log(mySet)
-
   return (
       <div className="card-wrapper">
-        <div>{JSON.stringify([mySet])}</div>
         <h1 className="card-title">Country Quiz</h1>
         {
           endGame ? 

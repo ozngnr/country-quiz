@@ -8,7 +8,7 @@ function ContextProvider({children}) {
   const [isLoading, setIsLoading] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(1)
   const [score, setScore] = useState(0)
-  const [endGame, setEndGame] = useState(true)
+  const [endGame, setEndGame] = useState(false)
   const [showButton, setShowButton] = useState(false) 
 
   //functions
@@ -35,10 +35,11 @@ function ContextProvider({children}) {
     setCurrentQuestion(1)
     setScore(0)
     setEndGame(false)
+    setShowButton(false)
   }
 
   //get 4 random countries
-  const url = "https://restcountries.eu/rest/v2/region/europe?fields=name;capital;flag"
+  const url = "https://restcountries.eu/rest/v2/all?fields=name;capital;flag"
 
   useEffect(() => {
     setIsLoading(true)
@@ -49,11 +50,19 @@ function ContextProvider({children}) {
       .then(data => {
         setCountries(() => {
         const randomCountries = []
-        
-        for (let i = 0; i < 4; i++) {
+        const numbersArr = [] 
+        //make sure not to pick the same number twice
+        while (numbersArr.length < 4) {
           const random = Math.floor(Math.random() * data.length)
-          randomCountries.push({id: random, isCorrect: false, isSelected: false, ...data[random]})
+          if (!numbersArr.includes(random)) { 
+            numbersArr.push(random)
+          }
         }
+
+        numbersArr.map(number => (
+          randomCountries.push({id: number, isCorrect: false, isSelected: false, ...data[number]})
+        ))
+
         randomCountries[0].isCorrect = true
         return randomCountries
         })
