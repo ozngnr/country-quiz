@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"
 
-const Context = React.createContext();
+const Context = React.createContext()
 
 function ContextProvider({ children }) {
-  const [countries, setCountries] = useState([]);
-  const [question, setQuestion] = useState({ question: "", answers: [] });
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentQuestion, setCurrentQuestion] = useState(1);
-  const [score, setScore] = useState(0);
-  const [endGame, setEndGame] = useState(false);
-  const [showButton, setShowButton] = useState(false);
+  const [countries, setCountries] = useState([])
+  const [question, setQuestion] = useState({ question: "", answers: [] })
+  const [isLoading, setIsLoading] = useState(false)
+  const [currentQuestion, setCurrentQuestion] = useState(1)
+  const [score, setScore] = useState(0)
+  const [endGame, setEndGame] = useState(false)
+  const [showButton, setShowButton] = useState(false)
 
   //functions
   function handleAnswer(choice) {
@@ -17,47 +17,46 @@ function ContextProvider({ children }) {
       answer.id === choice.id || answer.isCorrect
         ? { ...answer, isSelected: true }
         : { ...answer, isSelected: false }
-    );
+    )
 
-    setQuestion((prevQ) => ({ ...prevQ, answers: updatedAnswers }));
-    choice.isCorrect && score < currentQuestion && setScore(score + 1);
-    setShowButton(true);
+    setQuestion((prevQ) => ({ ...prevQ, answers: updatedAnswers }))
+    choice.isCorrect && score < currentQuestion && setScore(score + 1)
+    setShowButton(true)
   }
 
   function nextQuestion() {
     if (currentQuestion < 10) {
-      setCurrentQuestion(currentQuestion + 1);
-      return setShowButton(false);
+      setCurrentQuestion(currentQuestion + 1)
+      return setShowButton(false)
     }
-    setEndGame(true);
+    setEndGame(true)
   }
 
   function resetGame() {
-    setCurrentQuestion(1);
-    setScore(0);
-    setEndGame(false);
-    setShowButton(false);
+    setCurrentQuestion(1)
+    setScore(0)
+    setEndGame(false)
+    setShowButton(false)
   }
 
   //get 4 random countries
-  const url = "https://restcountries.com/v3.1/all";
+  const url = "https://restcountries.com/v3.1/all"
 
   useEffect(() => {
-    setIsLoading(true);
+    setIsLoading(true)
 
     fetch(url)
       .then((res) => res.json())
-      // .then((data) => data.filter((item) => item.capital[0] !== "")) // remove data without capital value
       .then((data) => {
-        console.log(data);
+        console.log(data)
         setCountries(() => {
-          const randomCountries = [];
-          const numbersArr = [];
+          const randomCountries = []
+          const numbersArr = []
           //make sure not to pick the same number twice
           while (numbersArr.length < 4) {
-            const random = Math.floor(Math.random() * data.length);
+            const random = Math.floor(Math.random() * data.length)
             if (!numbersArr.includes(random)) {
-              numbersArr.push(random);
+              numbersArr.push(random)
             }
           }
 
@@ -70,21 +69,21 @@ function ContextProvider({ children }) {
               capital: data[number].capital[0],
               flag: data[number].flags.svg,
             })
-          );
+          )
 
-          randomCountries[0].isCorrect = true;
-          console.log(randomCountries);
-          return randomCountries;
-        });
-        setIsLoading(false);
-      });
-    console.log(countries);
-  }, [currentQuestion]);
+          randomCountries[0].isCorrect = true
+          console.log(randomCountries)
+          return randomCountries
+        })
+        setIsLoading(false)
+      })
+    console.log(countries)
+  }, [currentQuestion])
 
   // create a random question then change state
   useEffect(() => {
     function getQuestion() {
-      const roll = Math.random();
+      const roll = Math.random()
       if (roll < 0.5) {
         return setQuestion({
           question: `What is the capital of ${countries[0].name}?`,
@@ -96,7 +95,7 @@ function ContextProvider({ children }) {
               isCorrect,
               isSelected,
             })), // get necessary properties
-        });
+        })
       }
 
       setQuestion({
@@ -110,10 +109,10 @@ function ContextProvider({ children }) {
             isCorrect,
             isSelected,
           })), // get necessary properties
-      });
+      })
     }
-    countries.length > 0 && getQuestion();
-  }, [countries]);
+    countries.length > 0 && getQuestion()
+  }, [countries])
 
   return (
     <Context.Provider
@@ -130,7 +129,7 @@ function ContextProvider({ children }) {
     >
       {children}
     </Context.Provider>
-  );
+  )
 }
 
-export { Context, ContextProvider };
+export { Context, ContextProvider }

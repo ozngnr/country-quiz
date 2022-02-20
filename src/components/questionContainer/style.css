@@ -1,15 +1,11 @@
 .card-wrapper {
-  position: absolute;
-  top: 15vh;
-  left: 50%;
+  max-width: 500px;
   color: #1d355d;
-  transform: translateX(-50%);
 }
 
 .card {
   position: relative;
   text-align: center;
-  width: 465px;
   background: white;
   border-radius: 25px;
   padding: 2em;
@@ -71,6 +67,5 @@
   background: #f9a826;
   color: #f2f2f2;
   padding: 0.875em 2em;
-  /* margin-right: 0; */
   margin-left: auto;
 }
