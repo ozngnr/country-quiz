@@ -48,7 +48,10 @@ function ContextProvider({ children }) {
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
+<<<<<<< HEAD
         console.log(data)
+=======
+>>>>>>> 603d6b73bf7654241b260e2bac76f5f6377cec0c
         setCountries(() => {
           const randomCountries = []
           const numbersArr = []
@@ -69,6 +72,7 @@ function ContextProvider({ children }) {
               capital: data[number].capital[0],
               flag: data[number].flags.svg,
             })
+<<<<<<< HEAD
           )
 
           randomCountries[0].isCorrect = true
@@ -79,6 +83,17 @@ function ContextProvider({ children }) {
       })
     console.log(countries)
   }, [currentQuestion])
+=======
+          );
+          
+          randomCountries[0].isCorrect = true;
+
+          return randomCountries;
+        });
+        setIsLoading(false);
+      });
+  }, [currentQuestion]);
+>>>>>>> 603d6b73bf7654241b260e2bac76f5f6377cec0c
 
   // create a random question then change state
   useEffect(() => {
