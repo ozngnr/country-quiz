@@ -49,7 +49,6 @@ function ContextProvider({ children }) {
       .then((res) => res.json())
       // .then((data) => data.filter((item) => item.capital[0] !== "")) // remove data without capital value
       .then((data) => {
-        console.log(data);
         setCountries(() => {
           const randomCountries = [];
           const numbersArr = [];
@@ -71,14 +70,13 @@ function ContextProvider({ children }) {
               flag: data[number].flags.svg,
             })
           );
-
+          
           randomCountries[0].isCorrect = true;
-          console.log(randomCountries);
+
           return randomCountries;
         });
         setIsLoading(false);
       });
-    console.log(countries);
   }, [currentQuestion]);
 
   // create a random question then change state
