@@ -9,7 +9,7 @@ function ContextProvider({ children }) {
   const [currentQuestion, setCurrentQuestion] = useState(1)
   const [score, setScore] = useState(0)
   const [endGame, setEndGame] = useState(false)
-  const [showButton, setShowButton] = useState(false)
+  const [showNextButton, setShowNextButton] = useState(false)
 
   //functions
   function handleAnswer(choice) {
@@ -21,13 +21,13 @@ function ContextProvider({ children }) {
 
     setQuestion((prevQ) => ({ ...prevQ, answers: updatedAnswers }))
     choice.isCorrect && score < currentQuestion && setScore(score + 1)
-    setShowButton(true)
+    setShowNextButton(true)
   }
 
   function nextQuestion() {
     if (currentQuestion < 10) {
       setCurrentQuestion(currentQuestion + 1)
-      return setShowButton(false)
+      return setShowNextButton(false)
     }
     setEndGame(true)
   }
@@ -36,7 +36,7 @@ function ContextProvider({ children }) {
     setCurrentQuestion(1)
     setScore(0)
     setEndGame(false)
-    setShowButton(false)
+    setShowNextButton(false)
   }
 
   useEffect(() => {
@@ -48,7 +48,7 @@ function ContextProvider({ children }) {
       .then((data) => {
         const randomCountries = []
         const numbersArr = []
-        //generate random numbers to get 4 random countries
+        // generate random numbers to get 4 random countries
         // make sure not to pick the same number twice
         while (numbersArr.length < 4) {
           const random = Math.floor(Math.random() * data.length)
@@ -103,7 +103,7 @@ function ContextProvider({ children }) {
         endGame,
         score,
         nextQuestion,
-        showButton,
+        showNextButton,
         resetGame,
       }}
     >
