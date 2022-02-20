@@ -39,61 +39,40 @@ function ContextProvider({ children }) {
     setShowButton(false)
   }
 
-  //get 4 random countries
-  const url = "https://restcountries.com/v3.1/all"
-
   useEffect(() => {
     setIsLoading(true)
 
-    fetch(url)
+    fetch("https://restcountries.com/v3.1/all")
       .then((res) => res.json())
+      .then((data) => data.filter((c) => c.capital !== undefined)) //remove countries without a capital
       .then((data) => {
-<<<<<<< HEAD
-        console.log(data)
-=======
->>>>>>> 603d6b73bf7654241b260e2bac76f5f6377cec0c
-        setCountries(() => {
-          const randomCountries = []
-          const numbersArr = []
-          //make sure not to pick the same number twice
-          while (numbersArr.length < 4) {
-            const random = Math.floor(Math.random() * data.length)
-            if (!numbersArr.includes(random)) {
-              numbersArr.push(random)
-            }
+        const randomCountries = []
+        const numbersArr = []
+        //generate random numbers to get 4 random countries
+        // make sure not to pick the same number twice
+        while (numbersArr.length < 4) {
+          const random = Math.floor(Math.random() * data.length)
+          if (!numbersArr.includes(random)) {
+            numbersArr.push(random)
           }
-
-          numbersArr.map((number) =>
-            randomCountries.push({
-              id: number,
-              isCorrect: false,
-              isSelected: false,
-              name: data[number].name.common,
-              capital: data[number].capital[0],
-              flag: data[number].flags.svg,
-            })
-<<<<<<< HEAD
-          )
-
-          randomCountries[0].isCorrect = true
-          console.log(randomCountries)
-          return randomCountries
-        })
+        }
+        //push country data into a new array
+        numbersArr.map((number) =>
+          randomCountries.push({
+            id: number,
+            isCorrect: false,
+            isSelected: false,
+            name: data[number].name.common,
+            capital: data[number].capital[0],
+            flag: data[number].flags.svg,
+          })
+        )
+        //first country is the correct answer
+        randomCountries[0].isCorrect = true
+        setCountries(randomCountries)
         setIsLoading(false)
       })
-    console.log(countries)
   }, [currentQuestion])
-=======
-          );
-          
-          randomCountries[0].isCorrect = true;
-
-          return randomCountries;
-        });
-        setIsLoading(false);
-      });
-  }, [currentQuestion]);
->>>>>>> 603d6b73bf7654241b260e2bac76f5f6377cec0c
 
   // create a random question then change state
   useEffect(() => {
@@ -102,28 +81,14 @@ function ContextProvider({ children }) {
       if (roll < 0.5) {
         return setQuestion({
           question: `What is the capital of ${countries[0].name}?`,
-          answers: countries
-            .sort((a, b) => a.id - b.id) // shuffle countries array before rendering
-            .map(({ id, capital, isCorrect, isSelected }) => ({
-              id,
-              capital,
-              isCorrect,
-              isSelected,
-            })), // get necessary properties
+          answers: countries.sort((a, b) => a.id - b.id), // shuffle countries array before rendering
         })
       }
 
       setQuestion({
         flag: countries[0].flag,
         question: `Which country does this flag belong to?`,
-        answers: countries
-          .sort((a, b) => a.id - b.id) // shuffle countries array before rendering
-          .map(({ id, name, isCorrect, isSelected }) => ({
-            id,
-            country: name,
-            isCorrect,
-            isSelected,
-          })), // get necessary properties
+        answers: countries.sort((a, b) => a.id - b.id), // shuffle countries array before rendering
       })
     }
     countries.length > 0 && getQuestion()
