@@ -1,98 +1,102 @@
-import React, { useState, useEffect } from "react"
+import axios from "axios";
+import React, { useState, useEffect, useCallback } from "react";
 
-const Context = React.createContext()
+const Context = React.createContext();
 
 function ContextProvider({ children }) {
-  const [countries, setCountries] = useState([])
-  const [question, setQuestion] = useState({ question: "", answers: [] })
-  const [isLoading, setIsLoading] = useState(false)
-  const [currentQuestion, setCurrentQuestion] = useState(1)
-  const [score, setScore] = useState(0)
-  const [endGame, setEndGame] = useState(false)
-  const [showNextButton, setShowNextButton] = useState(false)
+  const [countries, setCountries] = useState([]);
+  const [question, setQuestion] = useState({ question: "", options: [] });
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(1);
+  const [score, setScore] = useState(0);
+  const [endGame, setEndGame] = useState(false);
+  const [showNextButton, setShowNextButton] = useState(false);
 
   //functions
   function handleAnswer(choice) {
-    const updatedAnswers = question.answers.map((answer) =>
+    const updatedOptions = question.options.map((answer) =>
       answer.id === choice.id || answer.isCorrect
         ? { ...answer, isSelected: true }
         : { ...answer, isSelected: false }
-    )
+    );
 
-    setQuestion((prevQ) => ({ ...prevQ, answers: updatedAnswers }))
-    choice.isCorrect && score < currentQuestion && setScore(score + 1)
-    setShowNextButton(true)
+    setQuestion((prevQ) => ({ ...prevQ, options: updatedOptions }));
+    choice.isCorrect && score < currentQuestion && setScore(score + 1);
+    setShowNextButton(true);
   }
 
   function nextQuestion() {
     if (currentQuestion < 10) {
-      setCurrentQuestion(currentQuestion + 1)
-      return setShowNextButton(false)
+      setCurrentQuestion(currentQuestion + 1);
+      createQuestion(countries);
+      return setShowNextButton(false);
     }
-    setEndGame(true)
+    setEndGame(true);
   }
 
   function resetGame() {
-    setCurrentQuestion(1)
-    setScore(0)
-    setEndGame(false)
-    setShowNextButton(false)
+    setCurrentQuestion(1);
+    setScore(0);
+    setEndGame(false);
+    setShowNextButton(false);
+    createQuestion(countries);
   }
 
-  useEffect(() => {
-    setIsLoading(true)
+  const createQuestion = useCallback((countries) => {
+    const options = [];
+    const numbers = [];
+    const roll = Math.random();
 
-    fetch("https://restcountries.com/v3.1/all")
-      .then((res) => res.json())
-      .then((data) => data.filter((c) => c.capital !== undefined)) //remove countries without a capital
-      .then((data) => {
-        const randomCountries = []
-        const numbersArr = []
-        // generate random numbers to get 4 random countries
-        // make sure not to pick the same number twice
-        while (numbersArr.length < 4) {
-          const random = Math.floor(Math.random() * data.length)
-          if (!numbersArr.includes(random)) {
-            numbersArr.push(random)
-          }
-        }
-        //push country data into a new array
-        numbersArr.map((number) =>
-          randomCountries.push({
-            id: number,
-            isCorrect: false,
-            isSelected: false,
-            name: data[number].name.common,
-            capital: data[number].capital[0],
-            flag: data[number].flags.svg,
-          })
-        )
-        //first country is the correct answer
-        randomCountries[0].isCorrect = true
-        setCountries(randomCountries)
-        setIsLoading(false)
-      })
-  }, [currentQuestion])
-
-  // create a random question then change state
-  useEffect(() => {
-    function getQuestion() {
-      const roll = Math.random()
-      if (roll < 0.5) {
-        return setQuestion({
-          question: `What is the capital of ${countries[0].name}?`,
-          answers: countries.sort((a, b) => a.id - b.id), // shuffle countries array before rendering
-        })
-      }
-
-      setQuestion({
-        flag: countries[0].flag,
-        question: `Which country does this flag belong to?`,
-        answers: countries.sort((a, b) => a.id - b.id), // shuffle countries array before rendering
-      })
+    while (numbers.length < 4) {
+      const number = Math.floor(Math.random() * countries.length);
+      !numbers.includes(number) && numbers.push(number);
     }
-    countries.length > 0 && getQuestion()
-  }, [countries])
+
+    numbers.map((number) =>
+      options.push({
+        id: number,
+        isCorrect: false,
+        isSelected: false,
+        flag: countries[number].flags.png,
+        country: countries[number].name.common,
+        capital: countries[number].capital[0],
+      })
+    );
+    options[0].isCorrect = true;
+
+    if (roll < 0.5) {
+      return setQuestion({
+        question: `What is the capital of ${options[0].country}?`,
+        options: options.sort((a, b) => a.id - b.id), // shuffle options before rendering
+      });
+    }
+
+    setQuestion({
+      flag: options[0].flag,
+      question: `Which country does this flag belong to?`,
+      options: options.sort((a, b) => a.id - b.id), // shuffle options before rendering
+    });
+  }, []);
+
+  useEffect(() => {
+    setIsLoading(true);
+    const getCountries = async () => {
+      const { data } = await axios.get("https://restcountries.com/v3.1/all");
+      // filter countries that don't have a capital
+      const countries = data.filter((c) => c.capital !== undefined);
+
+      setCountries(countries);
+      createQuestion(countries);
+    };
+    try {
+      getCountries();
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoading(false);
+  }, [createQuestion]);
+
+  console.log(question);
 
   return (
     <Context.Provider
@@ -109,7 +113,7 @@ function ContextProvider({ children }) {
     >
       {children}
     </Context.Provider>
-  )
+  );
 }
 
-export { Context, ContextProvider }
+export { Context, ContextProvider };

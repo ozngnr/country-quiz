@@ -1,16 +1,16 @@
-import React, { useContext } from "react"
-import { Context } from "../../context/context"
-import "./style.css"
+import React, { useContext } from "react";
+import { Context } from "../../context/context";
+import "./style.css";
 
-import { ReactComponent as AdventureLogo } from "../../images/undraw_adventure_4hum.svg"
-import { ReactComponent as WinnersLogo } from "../../images/undraw_winners_ao2o.svg"
+import { ReactComponent as AdventureLogo } from "../../images/undraw_adventure_4hum.svg";
+import { ReactComponent as WinnersLogo } from "../../images/undraw_winners_ao2o.svg";
 
-import Answers from "../answers"
-import Question from "../question"
+import Question from "../question";
+import Options from "../options";
 
 export default function QuestionCard() {
   const { endGame, score, nextQuestion, showNextButton, resetGame } =
-    useContext(Context)
+    useContext(Context);
 
   return (
     <div className="card-wrapper">
@@ -30,7 +30,7 @@ export default function QuestionCard() {
         <div className="card">
           <AdventureLogo className="card-image" />
           <Question />
-          <Answers />
+          <Options />
           {showNextButton && (
             <button onClick={() => nextQuestion()} className="card-btn next">
               Next
@@ -39,5 +39,5 @@ export default function QuestionCard() {
         </div>
       )}
     </div>
-  )
+  );
 }
